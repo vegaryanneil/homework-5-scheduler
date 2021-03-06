@@ -101,3 +101,10 @@ textarea {
   justify-content: center;
   align-items: center;
 }
+
+.pastMode {
+  background-color: green;
+}
+.presentMode {
+  background-color: blue;
+}
