@@ -1,62 +1,61 @@
-// Set up an interval to continously update the time
-var dateTime = null,
-  date = null;
+// // var currentHour = moment().format("LT");
+// var taskContainer = document.getElementsByClassName("task-container");
+// var currentHour = moment().format("LT");
+// var parseHour = parseInt(currentHour);
+// var val = parseInt(taskContainer);
 
-var update = function () {
-  date = moment(new Date());
-  dateTime.html(date.format("LLLL"));
-};
+// $(".task-container").each(function () {
+//   if (val > parseHour) {
+//     $(".task-container").css("backgroundColor", "#d3d3d3");
+//   } else if (val < parseHour) {
+//     $(".task-container").css("backgroundColor", "#77dd77");
+//   } else if (val === parseHour) {
+//     $(".task-container").css("backgroundColor", "#ff6961");
+//   }
+// });
 
 $(document).ready(function () {
-  dateTime = $("#currentDay");
-  update();
-  setInterval(update, 1000);
-});
-
-// Past Time
-// function pastMode() {
-//   if (dateTime < date) {
-//     $(".col-6").addClass("pastMode").removeClass("presentMode");
-//   } else {
-//     // Else use ‘day’ theme
-//     $(".col-6").addClass("presentMode").removeClass("pastMode");
-//   }
-// }
-// $(document).ready(function () {
-//   pastMode();
-// });
-
-// Present Time
-
-// Future Time
-
-// var currentHour = moment().format("LT");
-
-// $(".colorcode").each(function () {
-//   var time = parseInt($("#5"));
-
-//   if (time > currentHour && time < currentHour + 6) {
-//     $(this).css("background-color", "Blue");
-//   } else if (time < currentHour && time > currentHour - 6) {
-//     $(this).css("background-color", "red");
-//   } else if (time === currentHour) {
-//     $(this).css("background-color", "green");
-//   } else {
-//     $(this).css("background-color", "white");
-//   }
-// });
-
-var currentHour = new Date().getHours();
-var val = parseInt($(this).prop("id"));
-
-$(".colorcode").each(function () {
-  if (val > currentHour && val < currentHour + 6) {
-    $(this).css("background-color", "Blue");
-  } else if (val < currentHour && val > currentHour - 6) {
-    $(this).css("background-color", "Red");
-  } else if (val === currentHour) {
-    $(this).css("background-color", "Green");
-  } else {
-    $(this).css("background-color", "White");
-  }
+  // used moment.js to grab the current date and time
+  var time = moment().format("LLLL");
+  //displayed current date and time on page in p ID "currentDay".
+  $("#currentDay").text(time);
+  //setting up localstorage to store info added on calendar time blocks
+  var getThis = JSON.parse(localStorage.getItem("getThis")) || [];
+  //pulling each hour block to compare to current time to change color of timeblock to reflect the time of day future, past, or present.
+  $(".hour").each(function () {
+    var diffTimes = parseInt($(this).attr("id"));
+    var timeNow = parseInt(moment().hours());
+    //if timeblock is beyond the time now, it should be the past
+    if (diffTimes < timeNow) {
+      $(this).siblings().addClass("past");
+    }
+    //if timeblock over the time now, it is the future
+    if (diffTimes > timeNow) {
+      $(this).siblings().addClass("future");
+    }
+    //if time block is equal to time now then it should be red
+    if (diffTimes === timeNow) {
+      $(this).siblings().addClass("present");
+    }
+  });
+  // when the page loads lets retrieve in localstorage and pop in any box saved
+  $("input").each(function () {
+    var timeAgain = $(this).prev().attr("id");
+    for (var i = 0; i < getThis.length; i++) {
+      if (timeAgain === getThis[i].time) {
+        $(this).val(getThis[i].note);
+      }
+    }
+  });
+  //when the save button is clicked........
+  $(".saveBtn").on("click", function () {
+    //make a variable to call on the input box
+    var addToCalendar = $(this).prev().val();
+    //created variable to grab time by ID of area with input box that has info
+    var time = $(this).prev().prev().attr("id");
+    //used that time to create object to push to localstorage along with message to create array
+    getThis.push({ time: time, note: addToCalendar });
+    //took that object getThis and saved a string version into local storage
+    localStorage.setItem("getThis", JSON.stringify(getThis));
+  });
 });
