@@ -1,6 +1,6 @@
 # Homework-5-Scheduler
 
-![Scheduler](hw-5-scheduler.png)
+![Scheduler](Assets/hw-5-scheduler.png)
 
 ## Description
 
