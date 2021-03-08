@@ -1,28 +1,13 @@
-// // var currentHour = moment().format("LT");
-// var taskContainer = document.getElementsByClassName("task-container");
-// var currentHour = moment().format("LT");
-// var parseHour = parseInt(currentHour);
-// var val = parseInt(taskContainer);
-
-// $(".task-container").each(function () {
-//   if (val > parseHour) {
-//     $(".task-container").css("backgroundColor", "#d3d3d3");
-//   } else if (val < parseHour) {
-//     $(".task-container").css("backgroundColor", "#77dd77");
-//   } else if (val === parseHour) {
-//     $(".task-container").css("backgroundColor", "#ff6961");
-//   }
-// });
-
 $(document).ready(function () {
-  // used moment.js to grab the current date and time
-  var time = moment().format("LLLL");
-  //displayed current date and time on page in p ID "currentDay".
+  // moment.js to grab the current date and time
+  var time = moment().format("LL");
+  //displayed current date on page in p ID "currentDay".
   $("#currentDay").text(time);
-  //setting up localstorage to store info added on calendar time blocks
+  //set up localstorage to store info added on calendar time blocks
   var getThis = JSON.parse(localStorage.getItem("getThis")) || [];
   //pulling each hour block to compare to current time to change color of timeblock to reflect the time of day future, past, or present.
   $(".hour").each(function () {
+    // creates integers of the time block and current time so I can compare the numbers
     var diffTimes = parseInt($(this).attr("id"));
     var timeNow = parseInt(moment().hours());
     //if timeblock is beyond the time now, it should be the past
