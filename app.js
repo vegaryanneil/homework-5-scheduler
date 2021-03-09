@@ -1,25 +1,26 @@
 $(document).ready(function () {
   // moment.js to grab the current date and time
-  var time = moment().format("LL");
+  var localTime = moment().format("LLL");
+  setInterval(1000);
   //displayed current date on page in p ID "currentDay".
-  $("#currentDay").text(time);
+  $("#currentDay").text(localTime);
   //set up localstorage to store info added on calendar time blocks
   var getThis = JSON.parse(localStorage.getItem("getThis")) || [];
   //pulling each hour block to compare to current time to change color of timeblock to reflect the time of day future, past, or present.
-  $(".hour").each(function () {
+  $(".time").each(function () {
     // creates integers of the time block and current time so I can compare the numbers
-    var diffTimes = parseInt($(this).attr("id"));
-    var timeNow = parseInt(moment().hours());
-    //if timeblock is beyond the time now, it should be the past
-    if (diffTimes < timeNow) {
+    var timeBlock = parseInt($(this).attr("id"));
+    var currentTime = parseInt(moment().hours());
+    // If time is in past time hour block current time - it will be set to past and color change based on CSS
+    if (timeBlock < currentTime) {
       $(this).siblings().addClass("past");
     }
-    //if timeblock over the time now, it is the future
-    if (diffTimes > timeNow) {
+    // If time is in the future hour block compared to current time - it will be set to future
+    if (timeBlock > currentTime) {
       $(this).siblings().addClass("future");
     }
-    //if time block is equal to time now then it should be red
-    if (diffTimes === timeNow) {
+    // If time is in the same hour block - it will be set to present
+    if (timeBlock === currentTime) {
       $(this).siblings().addClass("present");
     }
   });
@@ -32,7 +33,6 @@ $(document).ready(function () {
       }
     }
   });
-  //when the save button is clicked........
   $(".saveBtn").on("click", function () {
     //make a variable to call on the input box
     var addToCalendar = $(this).prev().val();
